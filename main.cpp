@@ -2,74 +2,33 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
+#include "segment.hpp"
 
-int n = 0x7C;
+Segment segments[7] = {Segment('a'), Segment('b'), Segment('c'), Segment('d'), Segment('e'), Segment('f'), Segment('g')};
+
+int current = 0;
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
     glBegin(GL_QUADS);
-    if (n & 1)
+
+    for (Segment s : segments)
     {
-        // A
-        glVertex2f(-2.0, 5.0);
-        glVertex2f(-2.0, 4.5);
-        glVertex2f(2.0, 4.5);
-        glVertex2f(2.0, 5.0);
-    }
-    if (n >> 1 & 1)
-    {
-        // B
-        glVertex2f(2.2, 4.5);
-        glVertex2f(2.7, 4.5);
-        glVertex2f(2.7, 0.5);
-        glVertex2f(2.2, 0.5);
-    }
-    if (n >> 2 & 1)
-    {
-        // C
-        glVertex2f(2.2, 0.0);
-        glVertex2f(2.2, -4.0);
-        glVertex2f(2.7, -4.0);
-        glVertex2f(2.7, 0.0);
-    }
-    if (n >> 3 & 1)
-    {
-        // D
-        glVertex2f(-2.0, -4.0);
-        glVertex2f(-2.0, -4.5);
-        glVertex2f(2.0, -4.5);
-        glVertex2f(2.0, -4.0);
-    }
-    if (n >> 4 & 1)
-    {
-        // E
-        glVertex2f(-2.7, 0.0);
-        glVertex2f(-2.7, -4.0);
-        glVertex2f(-2.2, -4.0);
-        glVertex2f(-2.2, 0.0);
-    }
-    if (n >> 5 & 1)
-    {
-        // F
-        glVertex2f(-2.7, 4.5);
-        glVertex2f(-2.2, 4.5);
-        glVertex2f(-2.2, 0.5);
-        glVertex2f(-2.7, 0.5);
-    }
-    if (n >> 6 & 1)
-    {
-        // G
-        glVertex2f(-2.0, 0.5);
-        glVertex2f(-2.0, 0.0);
-        glVertex2f(2.0, 0.0);
-        glVertex2f(2.0, 0.5);
+        if (s.isContained(nombre[current]))
+        {
+            s.turnOn();
+            s.afficher();
+        }
+        else s.turnOff();
     }
 
     glEnd();
+    
+    current = (current + 1) % 16;
 
-    glFlush();
+    glutSwapBuffers();
 }
 
 void reshape(int w, int h)
@@ -82,15 +41,25 @@ void reshape(int w, int h)
 
 }
 
+void timer(int)
+{
+    glutPostRedisplay();
+    glutTimerFunc(1000, timer, 0);
+}
+
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGB);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
     glutInitWindowPosition(200, 100);
     glutInitWindowSize(500, 500);
     glutCreateWindow("Affichage 7 Segments");
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
+    glutTimerFunc(0, timer, 0);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glutMainLoop();
     return 0;
 }
+
+
+// g++ -o my_program main.cpp segment.cpp -lGL -lGLU -lglut
