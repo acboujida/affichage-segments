@@ -57,6 +57,7 @@ int main(int argc, char** argv) {
     glutReshapeFunc(reshape);
     glutTimerFunc(0, timer, 0);
     glClearColor(0.0, 0.0, 0.0, 1.0);
+    glColor4f(1.0, 0.0, 0.0, 1.0);
     glutMainLoop();
     return 0;
 }
