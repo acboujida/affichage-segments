@@ -14,6 +14,8 @@ void display() {
 
     glBegin(GL_QUADS);
 
+    glColor4f(1.0, 0.0, 0.0, 1.0);
+
     for (Segment s : segments)
     {
         if (s.isContained(nombre[current]))
@@ -21,7 +23,7 @@ void display() {
             s.turnOn();
             s.afficher();
         }
-        else s.turnOff();
+        s.turnOff();
     }
 
     glEnd();
@@ -57,7 +59,6 @@ int main(int argc, char** argv) {
     glutReshapeFunc(reshape);
     glutTimerFunc(0, timer, 0);
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    glColor4f(1.0, 0.0, 0.0, 1.0);
     glutMainLoop();
     return 0;
 }
